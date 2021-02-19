@@ -46,11 +46,7 @@ df['spike_triggered_array'] = df.apply(lambda x: generate_spike_triggered_array(
 
 session_records = df.to_dict(orient='records')
 
-dj.config['database.host'] = 'tutorial-db.datajoint.io'
-dj.config['database.user'] = 'nhabib'
-dj.config['database.password'] = 'Flipako40'
 dj.config["enable_python_native_blobs"] = True
-
 schema = dj.schema('nhabib_tutorial', locals())  
 
 @schema
