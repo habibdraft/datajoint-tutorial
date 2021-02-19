@@ -28,6 +28,22 @@ def get_stim_times(onset, duration, frames):
 
 df['stim_times'] = df.apply(lambda x: get_stim_times(x['stimulus_onset'], x['stim_duration'], x['n_frames']), axis=1)
 
+def generate_spike_triggered_array(spike_times, stim_times):
+    timesteps = 150
+    stim_times *= 1000
+    sta_list = []
+    for neuron in spike_times:
+        sta = np.zeros((timesteps,))
+        neuron *= 1000
+        spike_indices = neuron[timesteps:].nonzero()[0] + timesteps
+        for spike_index in spike_indices:
+            sta += stim_times[spike_index-timesteps:spike_index]
+            sta /= len(neuron)
+            sta_list.append(sta)
+    return(sta_list)
+
+df['spike_triggered_array'] = df.apply(lambda x: generate_spike_triggered_array(x['spikes'], x['stim_times']), axis=1)
+
 session_records = df.to_dict(orient='records')
 
 dj.config['database.host'] = 'tutorial-db.datajoint.io'
