@@ -73,6 +73,7 @@ class Session(dj.Manual):
       session_date: date
       stim_duration = NULL : float
       stim_times: longblob
+      spike_triggered_array: longblob
       """
  session = Session()
  session.insert(session_records)
